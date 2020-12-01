@@ -31,6 +31,12 @@ merged_boxes = true_boxes.merge(predicted_boxes, on='image_id',
 merged_boxes['iou'] = merged_boxes.apply(lambda row: row_iou(row), axis=1)
 merged_boxes['area_ratio'] = merged_boxes.apply(lambda row: row_area_ratio(row), axis=1)
 
+# summarize
+total_faces = len(merged_boxes.index)
+faces_not_found = merged_boxes.iou.isna().sum()
+print(f"Total number of faces: {total_faces}, faces not found: {faces_not_found}, "
+      f"ratio: {round(faces_not_found / total_faces, 4) * 100}%.")
+
 # save visualizations
 relation_plot = sns.scatterplot(data=merged_boxes, x="area_ratio", y="iou")
 relation_plot.set(xlabel='Area Ratio', ylabel='Intersection over Union')
