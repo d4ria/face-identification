@@ -10,13 +10,19 @@ def intersection_over_union(boxA, boxB) -> float:
     """
     if boxA[3] == 0 or boxB[3] == 0:
         return None
-    boxA_area = boxA[2] * boxA[3]
-    boxB_area = boxB[2] * boxB[3]
+    if boxA[0] + boxA[2] <= boxB[0] or boxB[0] + boxB[2] <= boxA[0]:
+        return 0
+    if boxA[1] + boxA[3] <= boxB[1] or boxB[1] + boxB[3] <= boxA[1]:
+        return 0
     x_upper_left = max(boxA[0], boxB[0])
     y_upper_left = max(boxA[1], boxB[1])
     x_bottom_right = min(boxA[0] + boxA[2], boxB[0] + boxB[2])
     y_bottom_right = min(boxA[1] + boxA[3], boxB[1] + boxB[3])
-    intersection_area = (x_bottom_right - x_upper_left) * (y_bottom_right - y_upper_left)
+    intersection_area = abs(max((x_bottom_right - x_upper_left) * (y_bottom_right - y_upper_left), 0))
+    if intersection_area == 0:
+        return 0
+    boxA_area = abs(boxA[2] * boxA[3])
+    boxB_area = abs(boxB[2] * boxB[3])
     iou = intersection_area / (boxA_area + boxB_area - intersection_area)
     return iou
 

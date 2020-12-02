@@ -57,8 +57,10 @@ def get_face_encoding(face_image):
     :param face_image: aligned face image
     :return: face encoding
     """
-    encoding = face_recognition.face_encodings(face_image)[0]
-    return encoding
+    encodings = face_recognition.face_encodings(face_image)
+    if encodings:
+        return encodings[0]
+    return None
 
 
 def add_dict_entry(dictionary, image_id, x1, y1, width, height):
