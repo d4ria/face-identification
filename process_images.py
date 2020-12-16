@@ -78,15 +78,18 @@ if __name__ == "__main__":
     detected_boxes = {'image_id': [], 'x_1': [], 'y_1': [],
                       'width': [], 'height': []}
     face_encodings = {'image_id': [], 'encoding': []}
+    #with open('data/hog_bounding_boxes_dict.pkl', 'rb') as f:
+    #    detected_boxes = pickle.load(f)
+    #with open('data/face_encodings.pkl', 'rb') as f:
+    #    face_encodings = pickle.load(f)
     texts = []
 
     # filter images
     identities = pd.read_table('annotations/identity_CelebA.txt', delim_whitespace=True)
     x = identities.identity.value_counts()
-    indices_only_1 = x.index[x == 1].tolist()
+    indices_max_2 = x.index[x <= 2].tolist()
     indices_over_29 = x.index[x > 29].tolist()
-    filtered_indices = indices_over_29 + indices_only_1
-    filtered_indices = indices_over_29 + indices_only_1
+    filtered_indices = indices_over_29 + indices_max_2
     filtered_files = identities.loc[identities.identity.isin(filtered_indices)].image_id.tolist()
 
     # iterate over photos
